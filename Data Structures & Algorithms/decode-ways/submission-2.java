@@ -1,0 +1,79 @@
+class Solution {
+
+    Map<Integer, String> map = new HashMap<>() {{ 
+        put(1, "A");
+        put(2, "B");
+        put(3, "C");
+        put(4, "D");
+        put(5, "E");
+        put(6, "F");
+        put(7, "G");
+        put(8, "H");
+        put(9, "I");
+
+        put(10, "J");
+        put(11, "K");
+        put(12, "L");  
+        put(13, "M");  
+        put(14, "N");  
+        put(15, "O");  
+        put(16, "P");  
+        put(17, "Q");  
+        put(18, "R");  
+        put(19, "S");  
+        put(20, "T");  
+        put(21, "U");  
+        // T U 
+        put(22, "V");
+        put(23, "W");     
+        put(24, "X");     
+        put(25, "Y");     
+        put(26, "Z");     
+    }};
+
+    
+    public int numDecodings(String s) {
+    
+        Set<String> set = new HashSet<>();
+        Map<Integer, Integer> dp = new HashMap<>();
+        dp.put(s.length(), 1);
+        return dfs(s, 0, "", set, dp);
+    }
+
+    int dfs(String s, int index, String temp, Set<String> set, Map<Integer, Integer> dp) {
+        if (dp.containsKey(index)) {
+            return dp.get(index);
+        }
+        if (s.charAt(index) == '0') {
+            return 0;
+        }
+        // if (index == s.length()) {
+        //     set.add(temp);
+        //     return;
+        // }
+
+        // if (index > s.length()) {
+        //     return;
+        // }
+
+        // 1 digit
+        int res = 0;
+        int numIndex = s.charAt(index) - '0';
+        if (map.containsKey(numIndex)) {
+            res += dfs(s, index + 1, temp + map.get(numIndex), set, dp);
+        }
+
+        // 2 digits
+        if (index + 1 < s.length()) {
+            if (numIndex == 1 || (numIndex == 2 && (s.charAt(index + 1) - '0') <= 6)) {
+                int secondDigit = Integer.valueOf(s.substring(index, index + 2));
+                if (map.containsKey(secondDigit)) {
+                    res += dfs(s, index + 2, temp + map.get(secondDigit), set, dp);
+                }
+            }
+        }
+
+        dp.put(index, res);
+        return res;
+    }
+}
